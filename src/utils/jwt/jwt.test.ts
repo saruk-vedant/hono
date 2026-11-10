@@ -59,6 +59,17 @@ describe('isTokenHeader', () => {
 
     expect(JWT.isTokenHeader(invalidTokenHeader)).toBe(false)
   })
+
+  it('returns true when the typ field contains custom or lowercase token types', () => {
+    expect(JWT.isTokenHeader({ alg: AlgorithmTypes.HS256, typ: 'at+jwt' })).toBe(true)
+    expect(JWT.isTokenHeader({ alg: AlgorithmTypes.HS256, typ: 'jwt' })).toBe(true)
+    expect(JWT.isTokenHeader({ alg: AlgorithmTypes.HS256, typ: 'application/at+jwt' })).toBe(true)
+  })
+
+  it('returns false when the typ field is not a string', () => {
+    expect(JWT.isTokenHeader({ alg: AlgorithmTypes.HS256, typ: 123 })).toBe(false)
+    expect(JWT.isTokenHeader({ alg: AlgorithmTypes.HS256, typ: true })).toBe(false)
+  })
 })
 
 describe('JWT', () => {
